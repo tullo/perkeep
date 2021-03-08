@@ -39,7 +39,7 @@
 			"handler": "storage-b2",
 			"handlerArgs": {
 				"auth": {
-					"account_id": "account",
+					"key_id": "account",
 					"application_key": "key"
 				},
 				"bucket": "bucket"

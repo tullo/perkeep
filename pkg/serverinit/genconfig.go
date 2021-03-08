@@ -621,7 +621,7 @@ func (b *lowBuilder) addS3Config(s3 string) error {
 func (b *lowBuilder) addB2Config(b2 string) error {
 	f := strings.SplitN(b2, ":", 3)
 	if len(f) < 3 {
-		return errors.New(`genconfig: expected "b2" field to be of form "account_id:application_key:bucket[/optional/dir]"`)
+		return errors.New(`genconfig: expected "b2" field to be of form "key_id:application_key:bucket[/optional/dir]"`)
 	}
 	account, key, bucket := f[0], f[1], f[2]
 	isReplica := b.hasPrefix("/bs/")
@@ -634,7 +634,7 @@ func (b *lowBuilder) addB2Config(b2 string) error {
 		a := args{
 			"bucket": bucket,
 			"auth": map[string]interface{}{
-				"account_id":      account,
+				"key_id":          account,
 				"application_key": key,
 			},
 		}

@@ -35,8 +35,8 @@ import (
 )
 
 var (
-	accountID = flag.String("account-id", "", "B2 Account ID for testing")
-	appKey    = flag.String("application-key", "", "B2 Application Key for testing")
+	keyID  = flag.String("key-id", "", "B2 Key ID for testing")
+	appKey = flag.String("application-key", "", "B2 Application Key for testing")
 )
 
 func TestStorage(t *testing.T) {
@@ -49,7 +49,7 @@ func TestStorageWithBucketDir(t *testing.T) {
 
 func testStorage(t *testing.T, bucketDir string) {
 	ctx := context.Background()
-	if *accountID == "" && *appKey == "" {
+	if *keyID == "" && *appKey == "" {
 		t.Skip("Skipping test without --account-id or --application-key flag")
 	}
 
@@ -62,7 +62,7 @@ func testStorage(t *testing.T, bucketDir string) {
 			sto, err := newFromConfig(nil, jsonconfig.Obj{
 				"bucket": bucketWithDir,
 				"auth": map[string]interface{}{
-					"account_id":      *accountID,
+					"key_id":          *keyID,
 					"application_key": *appKey,
 				},
 			})
