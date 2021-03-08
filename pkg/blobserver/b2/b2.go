@@ -55,8 +55,8 @@ func newFromConfig(_ blobserver.Loader, config jsonconfig.Obj) (blobserver.Stora
 		bucket    = config.RequiredString("bucket")
 		cacheSize = config.OptionalInt64("cacheSize", 32<<20)
 
-		accountID = auth.RequiredString("account_id")
-		appKey    = auth.RequiredString("application_key")
+		keyID  = auth.RequiredString("key_id")
+		appKey = auth.RequiredString("application_key")
 	)
 
 	if err := config.Validate(); err != nil {
@@ -79,7 +79,7 @@ func newFromConfig(_ blobserver.Loader, config jsonconfig.Obj) (blobserver.Stora
 	*t = *http.DefaultTransport.(*http.Transport)
 	t.MaxIdleConnsPerHost = 50 // we do delete bursts
 	httpClient := &http.Client{Transport: t}
-	cl, err := b2.NewClient(accountID, appKey, httpClient)
+	cl, err := b2.NewClient(keyID, appKey, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +161,7 @@ func (s *Storage) StatBlobs(ctx context.Context, blobs []blob.Ref, fn func(blob.
 	gate := syncutil.NewGate(5) // arbitrary cap
 	return blobserver.StatBlobsParallelHelper(ctx, blobs, fn, gate, func(br blob.Ref) (sb blob.SizedRef, err error) {
 		fi, err := s.b.GetFileInfoByName(s.dirPrefix + br.String())
-		if err == b2.FileNotFoundError {
+		if err == b2.ErrFileNotFoundError {
 			return sb, nil
 		}
 		if err != nil {
@@ -221,7 +221,7 @@ func (s *Storage) RemoveBlobs(ctx context.Context, blobs []blob.Ref) error {
 		grp.Go(func() error {
 			defer gate.Done()
 			fi, err := s.b.GetFileInfoByName(s.dirPrefix + br.String())
-			if err == b2.FileNotFoundError {
+			if err == b2.ErrFileNotFoundError {
 				return nil
 			}
 			if err != nil {

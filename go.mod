@@ -8,7 +8,6 @@ require (
 	cloud.google.com/go/datastore v1.1.0
 	cloud.google.com/go/logging v1.1.2
 	cloud.google.com/go/storage v1.10.0
-	github.com/FiloSottile/b2 v0.0.0-20170207175032-b197f7a2c317 // indirect
 	github.com/aws/aws-sdk-go v1.14.31
 	github.com/bradfitz/latlong v0.0.0-20170410180902-f3db6d0dff40
 	github.com/cznic/fileutil v0.0.0-20180108211300-6a051e75936f // indirect
@@ -73,3 +72,5 @@ require (
 )
 
 replace google.golang.org/grpc v1.14.0 => github.com/bradfitz/grpc-go v0.0.0-20170203184515-188a132adcfba339f1f2d5da52498451341f9ee8
+
+replace github.com/perkeep/b2 => ../perkeep-b2/
